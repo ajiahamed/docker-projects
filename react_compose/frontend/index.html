@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Simple App</title>
+</head>
+<body>
+  <h1>Frontend</h1>
+  <button onclick="loadData()">Get Data</button>
+  <p id="result"></p>
+
+  <script>
+    function loadData() {
+      fetch("http://localhost:5000/data")
+        .then(res => res.json())
+        .then(data => {
+          document.getElementById("result").innerText = data.db_response;
+        });
+    }
+  </script>
+</body>
+</html>
