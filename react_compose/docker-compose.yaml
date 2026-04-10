@@ -1,0 +1,49 @@
+---
+name: python-compose
+services:
+
+  db:
+    image: postgres:15
+    container_name: postgres_db
+    restart: always
+    environment:
+      POSTGRES_DB: mydb
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+    volumes:
+      - db_data:/var/lib/postgresql/data
+    networks:
+      - private
+
+  backend:
+    build: ./backend
+    container_name: backend_app
+    restart: always
+    depends_on:
+      - db
+    ports:
+      - "5000:5000"
+    networks:
+      - private
+      - public
+
+  frontend:
+    build: ./frontend
+    container_name: frontend_app
+    restart: always
+    ports:
+      - "8080:80"
+    networks:
+      - public
+
+volumes:
+  db_data:
+    driver: local
+
+networks:
+  public:
+    driver: bridge
+
+  private:
+    driver: bridge
+    internal: true
